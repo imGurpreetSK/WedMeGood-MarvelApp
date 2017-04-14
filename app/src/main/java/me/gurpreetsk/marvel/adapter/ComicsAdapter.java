@@ -41,6 +41,7 @@ public class ComicsAdapter extends RecyclerView.Adapter<ComicsAdapter.MyViewHold
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +57,12 @@ public class ComicsAdapter extends RecyclerView.Adapter<ComicsAdapter.MyViewHold
         holder.textviewComicTitle.setText(comics.get(holder.getAdapterPosition()).getTitle());
     }
 
+
     @Override
     public int getItemCount() {
         return comics.size();
     }
+
 
     public void swap(List<Comic> comics) {
         this.comics.clear();

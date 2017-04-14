@@ -1,13 +1,13 @@
 package me.gurpreetsk.marvel.fragment;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,8 +32,6 @@ import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
-import me.gurpreetsk.marvel.activity.MainActivity;
-import me.gurpreetsk.marvel.activity.SplashActivity;
 import me.gurpreetsk.marvel.adapter.ComicsAdapter;
 import me.gurpreetsk.marvel.model.Comic;
 import me.gurpreetsk.marvel.model.ComicsTable;
@@ -49,6 +46,8 @@ public class ComicsFragment extends Fragment {
 
     @BindView(R.id.comics_recycler_view)
     RecyclerView comicsRecyclerView;
+    @BindView(R.id.comics_refresh_layout)
+    SwipeRefreshLayout comicsRefreshLayout;
 
     SharedPreferences preferences;
     ComicsAdapter comicsAdapter;
@@ -76,7 +75,13 @@ public class ComicsFragment extends Fragment {
         comicsRecyclerView.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView recyclerView) {
-                fetchPaginatedDataFromAPI();
+                fetchPaginatedComicsDataFromAPI();
+            }
+        });
+        comicsRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                comicsAdapter.swap(fetchComics());
             }
         });
 
@@ -86,11 +91,13 @@ public class ComicsFragment extends Fragment {
 
     private List<Comic> fetchComics() {
         Cursor cursor = getContext().getContentResolver().query(ComicsTable.CONTENT_URI, null, null, null, null);
+        if (comicsRefreshLayout.isRefreshing())
+            comicsRefreshLayout.setRefreshing(false);
         return ComicsTable.getRows(cursor, true);
     }
 
 
-    private void fetchPaginatedDataFromAPI() {
+    private void fetchPaginatedComicsDataFromAPI() {
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         Uri uri = Uri.parse(Endpoints.getComicsUrl())
                 .buildUpon()
@@ -99,7 +106,7 @@ public class ComicsFragment extends Fragment {
                 .appendQueryParameter("hash", Utils.getMD5(timestamp))
                 // if page is 1, get results 20-40; 2 -> 40-60 and so on
                 .appendQueryParameter("offset",
-                        String.valueOf(preferences.getInt(getString(R.string.PAGE_NUMBER), 1) * 20))
+                        String.valueOf(preferences.getInt(getString(R.string.COMICS_PAGE_NUMBER), 1) * 20))
                 .build();
 
         JsonObjectRequest request = new JsonObjectRequest(uri.toString(),
@@ -128,8 +135,8 @@ public class ComicsFragment extends Fragment {
                                 }
                             }
                             preferences.edit()
-                                    .putInt(getString(R.string.PAGE_NUMBER),
-                                            preferences.getInt(getString(R.string.PAGE_NUMBER), 0) + 1)
+                                    .putInt(getString(R.string.COMICS_PAGE_NUMBER),
+                                            preferences.getInt(getString(R.string.COMICS_PAGE_NUMBER), 0) + 1)
                                     .apply();
                         } catch (JSONException e) {
                             e.printStackTrace();

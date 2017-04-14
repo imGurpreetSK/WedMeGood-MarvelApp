@@ -17,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.R;
 import me.gurpreetsk.marvel.model.Character;
-import me.gurpreetsk.marvel.model.Comic;
 
 /**
  * Created by gurpreet on 14/04/17.
@@ -29,7 +28,7 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.My
     private Context context;
 
 
-    public CharactersAdapter(List<Character> characters, Context context) {
+    public CharactersAdapter(Context context, List<Character> characters) {
         this.characters = characters;
         this.context = context;
     }
@@ -52,7 +51,6 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.My
         Picasso.with(context)
                 .load(characters.get(holder.getAdapterPosition()).getThumbnail())
                 .error(context.getResources().getDrawable(R.drawable.ic_error))
-                .centerInside()
                 .into(holder.imageviewCharacterThumbnail);
         holder.textviewCharacterTitle.setText(characters.get(holder.getAdapterPosition()).getName());
     }
@@ -60,6 +58,13 @@ public class CharactersAdapter extends RecyclerView.Adapter<CharactersAdapter.My
     @Override
     public int getItemCount() {
         return characters.size();
+    }
+
+
+    public void swap(List<Character> characters) {
+        this.characters.clear();
+        this.characters.addAll(characters);
+        notifyDataSetChanged();
     }
 
 

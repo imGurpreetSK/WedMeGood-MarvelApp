@@ -4,5 +4,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="IS_FIRST_RUN">is first run</string>
-    <string name="PAGE_NUMBER">page number to fetch</string>
+    <string name="COMICS_PAGE_NUMBER">comic page number to fetch</string>
+    <string name="CHARACTERS_PAGE_NUMBER">characters page number to fetch</string>
 </resources>

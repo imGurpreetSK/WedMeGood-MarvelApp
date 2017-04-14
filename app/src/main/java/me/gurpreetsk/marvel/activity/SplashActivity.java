@@ -23,6 +23,8 @@ import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
+import me.gurpreetsk.marvel.model.Character;
+import me.gurpreetsk.marvel.model.CharactersTable;
 import me.gurpreetsk.marvel.model.Comic;
 import me.gurpreetsk.marvel.model.ComicsTable;
 import me.gurpreetsk.marvel.utils.Endpoints;
@@ -63,9 +65,9 @@ public class SplashActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response);
                         try {
                             JSONArray array = response.getJSONObject("data").getJSONArray("results");
-                            Log.i(TAG, "onResponse: " + array.toString());
                             for (int i = 0; i < array.length(); i++) {
                                 Comic comic = new Comic();
                                 comic.setId(array.getJSONObject(i).getString("id"));
@@ -83,8 +85,10 @@ public class SplashActivity extends AppCompatActivity {
                                     Log.e(TAG, "onResponse: entry already exists");
                                 }
                             }
-                            preferences.edit().putBoolean(getString(R.string.IS_FIRST_RUN), false).apply();
-                            preferences.edit().putInt(getString(R.string.PAGE_NUMBER), 1).apply();
+                            preferences.edit().putBoolean(getString(R.string.IS_FIRST_RUN), false)
+                                    .putInt(getString(R.string.COMICS_PAGE_NUMBER), 1)
+                                    .putInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 1)
+                                    .apply();
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -99,6 +103,57 @@ public class SplashActivity extends AppCompatActivity {
                 });
         request.setRetryPolicy(new DefaultRetryPolicy(15000, 3, 1));
         InitApplication.getInstance().addToQueue(request);
+
+        Uri charUri = Uri.parse(Endpoints.getCharactersUrl())
+                .buildUpon()
+                .appendQueryParameter("apikey", BuildConfig.MARVEL_KEY)
+                .appendQueryParameter("ts", timestamp)
+                .appendQueryParameter("hash", Utils.getMD5(timestamp))
+                // if page is 1, get results 20-40; 2 -> 40-60 and so on
+                .appendQueryParameter("offset",
+                        String.valueOf(preferences.getInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 0) * 20))
+                .build();
+
+        JsonObjectRequest charRequest = new JsonObjectRequest(charUri.toString(),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response);
+                        try {
+                            JSONArray array = response.getJSONObject("data").getJSONArray("results");
+                            for (int i = 0; i < array.length(); i++) {
+                                Character character = new Character();
+                                character.setId(array.getJSONObject(i).getString("id"));
+                                character.setName(array.getJSONObject(i).getString("name"));
+                                character.setDescription(array.getJSONObject(i).getString("description"));
+                                character.setThumbnail(array.getJSONObject(i).getJSONObject("thumbnail")
+                                        .getString("path") + ".jpg");
+                                try {
+                                    getContentResolver().insert(CharactersTable.CONTENT_URI,
+                                            CharactersTable.getContentValues(character, true));
+                                } catch (Exception e) {
+                                    Log.e(TAG, "onResponse: entry already exists");
+                                }
+                            }
+                            preferences.edit()
+                                    .putInt(getString(R.string.CHARACTERS_PAGE_NUMBER),
+                                            preferences.getInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 0) + 1)
+                                    .apply();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(SplashActivity.this, "Error while fetching data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        charRequest.setRetryPolicy(new DefaultRetryPolicy(15000, 3, 1));
+        InitApplication.getInstance().addToQueue(charRequest);
+
     }
 
 
