@@ -18,7 +18,8 @@ android {
         }
     }
     buildTypes.each {
-//        it.buildConfigField('String', "TIME_ZONE_KEY", TIME_ZONE_KEY)
+        it.buildConfigField('String', "MARVEL_KEY", MARVEL_KEY)
+        it.buildConfigField('String', "MARVEL_PRIVATE_KEY", MARVEL_PRIVATE_KEY)
     }
     productFlavors {
     }
@@ -30,9 +31,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
-
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.firebase:firebase-jobdispatcher:0.6.0'
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.volley:volley:1.0.0'
