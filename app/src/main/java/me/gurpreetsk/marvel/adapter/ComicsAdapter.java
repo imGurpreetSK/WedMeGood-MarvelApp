@@ -61,6 +61,12 @@ public class ComicsAdapter extends RecyclerView.Adapter<ComicsAdapter.MyViewHold
         return comics.size();
     }
 
+    public void swap(List<Comic> comics) {
+        this.comics.clear();
+        this.comics.addAll(comics);
+        notifyDataSetChanged();
+    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

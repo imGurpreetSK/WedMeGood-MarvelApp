@@ -30,6 +30,7 @@ import me.gurpreetsk.marvel.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
 
+    SharedPreferences preferences;
 
     private static final String TAG = SplashActivity.class.getSimpleName();
 
@@ -39,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SplashActivity.this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(SplashActivity.this);
         if (preferences.getBoolean(getString(R.string.IS_FIRST_RUN), true)) //fetch data if first run
             fetchData();
         else
@@ -64,6 +65,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray array = response.getJSONObject("data").getJSONArray("results");
+                            Log.i(TAG, "onResponse: " + array.toString());
                             for (int i = 0; i < array.length(); i++) {
                                 Comic comic = new Comic();
                                 comic.setId(array.getJSONObject(i).getString("id"));
@@ -81,6 +83,8 @@ public class SplashActivity extends AppCompatActivity {
                                     Log.e(TAG, "onResponse: entry already exists");
                                 }
                             }
+                            preferences.edit().putBoolean(getString(R.string.IS_FIRST_RUN), false).apply();
+                            preferences.edit().putInt(getString(R.string.PAGE_NUMBER), 1).apply();
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -95,6 +99,13 @@ public class SplashActivity extends AppCompatActivity {
                 });
         request.setRetryPolicy(new DefaultRetryPolicy(15000, 3, 1));
         InitApplication.getInstance().addToQueue(request);
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 
 }
