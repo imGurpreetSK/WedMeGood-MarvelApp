@@ -1,4 +1,4 @@
-# [Marvel Universe](/screeshots/marvel.apk)
+# [Marvel Universe](/screenshots/marvel.apk)
 
  A simple content browsing app created using [Marvel API](https://developer.marvel.com/)
 
@@ -21,3 +21,9 @@
 - RecyclerView and CardView
 
 ## Screenshots
+
+<div>
+    <img src="screenshots/splash.png" height=400px width=240px>
+    <img src="screenshots/characters.png" height=400px width=240px>
+    <img src="screenshots/details.png" height=400px width=240px>
+</div>
