@@ -20,6 +20,10 @@
 - ButterKnife for view-binding
 - RecyclerView and CardView
 
+## Usage
+Add MARVEL_KEY and MARVEL_PRIVATE_KEY strings in your gradle.properties file
+and build
+
 ## Screenshots
 
 <div>
