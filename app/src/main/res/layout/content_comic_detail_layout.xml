@@ -36,33 +36,14 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="?actionBarSize"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:paddingEnd="@dimen/bottom_margin"
-    android:paddingLeft="@dimen/bottom_margin"
-    android:paddingRight="@dimen/bottom_margin"
-    android:paddingStart="@dimen/bottom_margin">
-
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginEnd="@dimen/side_margin"
-    android:layout_marginRight="@dimen/side_margin"
-    android:text="Description: "
-    android:textSize="16sp"
-    android:textStyle="bold" />
-
     <TextView
         android:id="@+id/textview_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
+        android:minHeight="?actionBarSize"
         android:text="No Description Available" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
