@@ -6,4 +6,10 @@
     <string name="IS_FIRST_RUN">is first run</string>
     <string name="COMICS_PAGE_NUMBER">comic page number to fetch</string>
     <string name="CHARACTERS_PAGE_NUMBER">characters page number to fetch</string>
+    <string name="content_description_detail">Image of comic or character</string>
+    <string name="transition_name">image transition</string>
+    <string name="blank" />
+    <string name="key_comic">comic</string>
+    <string name="key_is_comic">is comic</string>
+    <string name="key_character">character</string>
 </resources>

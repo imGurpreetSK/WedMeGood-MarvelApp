@@ -3,9 +3,9 @@ package me.gurpreetsk.marvel.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,7 +13,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.squareup.haha.perflib.Main;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Comic comic = new Comic();
                                 comic.setId(array.getJSONObject(i).getString("id"));
                                 comic.setTitle(array.getJSONObject(i).getString("title"));
+                                comic.setDescription(array.getJSONObject(i).getString("description"));
                                 comic.setFormat(array.getJSONObject(i).getString("format"));
                                 comic.setIssueNumber(array.getJSONObject(i).getString("issueNumber"));
                                 comic.setPageCount(array.getJSONObject(i).getString("pageCount"));
@@ -85,10 +85,6 @@ public class SplashActivity extends AppCompatActivity {
                                     Log.e(TAG, "onResponse: entry already exists");
                                 }
                             }
-                            preferences.edit().putBoolean(getString(R.string.IS_FIRST_RUN), false)
-                                    .putInt(getString(R.string.COMICS_PAGE_NUMBER), 1)
-                                    .putInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 1)
-                                    .apply();
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -109,9 +105,6 @@ public class SplashActivity extends AppCompatActivity {
                 .appendQueryParameter("apikey", BuildConfig.MARVEL_KEY)
                 .appendQueryParameter("ts", timestamp)
                 .appendQueryParameter("hash", Utils.getMD5(timestamp))
-                // if page is 1, get results 20-40; 2 -> 40-60 and so on
-                .appendQueryParameter("offset",
-                        String.valueOf(preferences.getInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 0) * 20))
                 .build();
 
         JsonObjectRequest charRequest = new JsonObjectRequest(charUri.toString(),
@@ -136,10 +129,6 @@ public class SplashActivity extends AppCompatActivity {
                                     Log.e(TAG, "onResponse: entry already exists");
                                 }
                             }
-                            preferences.edit()
-                                    .putInt(getString(R.string.CHARACTERS_PAGE_NUMBER),
-                                            preferences.getInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 0) + 1)
-                                    .apply();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -160,6 +149,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        preferences.edit().putBoolean(getString(R.string.IS_FIRST_RUN), false)
+                .putInt(getString(R.string.COMICS_PAGE_NUMBER), 1)
+                .putInt(getString(R.string.CHARACTERS_PAGE_NUMBER), 1)
+                .apply();
         finish();
     }
 

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/default_layout_margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/bottom_margin"
+        android:paddingLeft="@dimen/bottom_margin"
+        android:paddingRight="@dimen/bottom_margin"
+        android:paddingStart="@dimen/bottom_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginRight="@dimen/side_margin"
+            android:text="ID: "
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/bottom_margin"
+    android:paddingLeft="@dimen/bottom_margin"
+    android:paddingRight="@dimen/bottom_margin"
+    android:paddingStart="@dimen/bottom_margin">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginEnd="@dimen/side_margin"
+    android:layout_marginRight="@dimen/side_margin"
+    android:text="Description: "
+    android:textSize="16sp"
+    android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textview_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No Description Available" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/bottom_margin"
+        android:paddingLeft="@dimen/bottom_margin"
+        android:paddingRight="@dimen/bottom_margin"
+        android:paddingStart="@dimen/bottom_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginRight="@dimen/side_margin"
+            android:text="Issue Number: "
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_issue_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/bottom_margin"
+        android:paddingLeft="@dimen/bottom_margin"
+        android:paddingRight="@dimen/bottom_margin"
+        android:paddingStart="@dimen/bottom_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginRight="@dimen/side_margin"
+            android:text="Format: "
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/bottom_margin"
+        android:paddingLeft="@dimen/bottom_margin"
+        android:paddingRight="@dimen/bottom_margin"
+        android:paddingStart="@dimen/bottom_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginRight="@dimen/side_margin"
+            android:text="Page count: "
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_page_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,5 +1,8 @@
 package me.gurpreetsk.marvel.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import ckm.simple.sql_provider.annotation.SimpleSQLColumn;
 import ckm.simple.sql_provider.annotation.SimpleSQLTable;
 
@@ -8,7 +11,7 @@ import ckm.simple.sql_provider.annotation.SimpleSQLTable;
  */
 
 @SimpleSQLTable(table = "characters", provider = "MarvelProvider")
-public class Character {
+public class Character implements Parcelable {
 
     @SimpleSQLColumn("id")
     private String id;
@@ -22,6 +25,15 @@ public class Character {
 
 
     public Character() {
+    }
+
+    public Character(Parcel in) {
+        String[] data = new String[4];
+        in.readStringArray(data);
+        this.id = data[0];
+        this.name = data[1];
+        this.description = data[2];
+        this.thumbnail = data[3];
     }
 
     public Character(String id, String name, String description, String thumbnail) {
@@ -62,4 +74,28 @@ public class Character {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{this.id,
+                this.name,
+                this.description,
+                this.thumbnail});
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Character createFromParcel(Parcel in) {
+            return new Character(in);
+        }
+
+        public Character[] newArray(int size) {
+            return new Character[size];
+        }
+    };
+
 }

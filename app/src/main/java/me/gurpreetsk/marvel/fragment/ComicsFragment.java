@@ -121,6 +121,7 @@ public class ComicsFragment extends Fragment {
                                 Comic comic = new Comic();
                                 comic.setId(array.getJSONObject(i).getString("id"));
                                 comic.setTitle(array.getJSONObject(i).getString("title"));
+                                comic.setDescription(array.getJSONObject(i).getString("description"));
                                 comic.setFormat(array.getJSONObject(i).getString("format"));
                                 comic.setIssueNumber(array.getJSONObject(i).getString("issueNumber"));
                                 comic.setPageCount(array.getJSONObject(i).getString("pageCount"));

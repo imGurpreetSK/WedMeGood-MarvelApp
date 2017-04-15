@@ -19,7 +19,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:transitionName="@string/transition_name" />
 
         <TextView
             android:id="@+id/textview_recyclerview_element"

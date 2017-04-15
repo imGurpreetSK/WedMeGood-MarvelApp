@@ -2,4 +2,8 @@
 <resources>
     <dimen name="default_layout_margin">16dp</dimen>
     <dimen name="margin_small">2dp</dimen>
+    <dimen name="appbar_layout_dimension">300dp</dimen>
+    <dimen name="appbar_default_elevation">4dp</dimen>
+    <dimen name="bottom_margin">8dp</dimen>
+    <dimen name="side_margin">8dp</dimen>
 </resources>

@@ -1,6 +1,10 @@
 package me.gurpreetsk.marvel.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.R;
+import me.gurpreetsk.marvel.activity.DetailsActivity;
 import me.gurpreetsk.marvel.model.Comic;
 
 /**
@@ -43,11 +48,22 @@ public class ComicsAdapter extends RecyclerView.Adapter<ComicsAdapter.MyViewHold
 
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: set
+                Intent intent = new Intent(context, DetailsActivity.class);
+                intent.putExtra(context.getString(R.string.key_is_comic), true);
+                intent.putExtra(context.getString(R.string.key_comic),
+                        comics.get(holder.getAdapterPosition()));
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation((Activity) context, holder.imageviewComicThumbnail,
+                                context.getString(R.string.transition_name));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    context.startActivity(intent, options.toBundle());
+                } else {
+                    context.startActivity(intent);
+                }
             }
         });
         Picasso.with(context)
