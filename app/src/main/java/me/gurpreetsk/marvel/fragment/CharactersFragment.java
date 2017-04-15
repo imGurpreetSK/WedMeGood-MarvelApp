@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
@@ -60,6 +61,7 @@ public class CharactersFragment extends Fragment {
 
     SharedPreferences preferences;
     CharactersAdapter charactersAdapter;
+    GridLayoutManager layoutManager;
 
     private static final String TAG = CharactersFragment.class.getSimpleName();
 
@@ -86,7 +88,7 @@ public class CharactersFragment extends Fragment {
 
         charactersAdapter = new CharactersAdapter(getContext(), fetchCharactersFromDB());
         recyclerView.setAdapter(charactersAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
@@ -113,12 +115,18 @@ public class CharactersFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.settings:
                 getContext().startActivity(new Intent(getContext(), SettingsActivity.class));
                 break;
         }
         return true;
+    }
+
+
+    @OnClick(R.id.fab)
+    public void goToTop() {
+        layoutManager.scrollToPositionWithOffset(0, 20);
     }
 
 

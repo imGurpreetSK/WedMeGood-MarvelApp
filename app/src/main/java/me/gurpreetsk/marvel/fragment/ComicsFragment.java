@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
@@ -57,6 +58,7 @@ public class ComicsFragment extends Fragment {
 
     SharedPreferences preferences;
     ComicsAdapter comicsAdapter;
+    GridLayoutManager layoutManager;
 
     private static final String TAG = ComicsFragment.class.getSimpleName();
 
@@ -82,7 +84,7 @@ public class ComicsFragment extends Fragment {
 
         comicsAdapter = new ComicsAdapter(getContext(), fetchComicsFromDB());
         comicsRecyclerView.setAdapter(comicsAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        layoutManager = new GridLayoutManager(getContext(), 2);
         comicsRecyclerView.setLayoutManager(layoutManager);
         comicsRecyclerView.addOnScrollListener(new EndlessScrollListener(layoutManager) {
             @Override
@@ -109,13 +111,19 @@ public class ComicsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.settings:
                 getContext().startActivity(new Intent(getContext(), SettingsActivity.class));
                 break;
         }
         return true;
     }
+
+    @OnClick(R.id.fab)
+    public void goToTop() {
+        layoutManager.scrollToPositionWithOffset(0, 20);
+    }
+
 
     private List<Comic> fetchComicsFromDB() {
         Cursor cursor = getContext().getContentResolver().query(ComicsTable.CONTENT_URI, null, null, null, null);
