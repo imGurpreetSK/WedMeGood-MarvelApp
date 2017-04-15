@@ -2,6 +2,6 @@
 <resources>
     <color name="colorPrimary">#FC0000</color>
     <color name="colorPrimaryDark">#BF0000</color>
-    <color name="colorAccent">#8be3ff</color>
+    <color name="colorAccent">#82d2ff</color>
     <color name="photo_placeholder">#ccc</color>
 </resources>

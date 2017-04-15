@@ -1,10 +1,12 @@
 package me.gurpreetsk.marvel.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,12 +89,21 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 supportFinishAfterTransition();
                 return true;
+            case R.id.settings:
+                startActivity(new Intent(DetailsActivity.this, SettingsActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

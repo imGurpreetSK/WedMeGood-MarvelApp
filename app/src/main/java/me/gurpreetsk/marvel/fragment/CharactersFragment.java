@@ -1,17 +1,22 @@
 package me.gurpreetsk.marvel.fragment;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -32,6 +37,7 @@ import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
+import me.gurpreetsk.marvel.activity.SettingsActivity;
 import me.gurpreetsk.marvel.adapter.CharactersAdapter;
 import me.gurpreetsk.marvel.adapter.ComicsAdapter;
 import me.gurpreetsk.marvel.model.Character;
@@ -63,6 +69,13 @@ public class CharactersFragment extends Fragment {
 
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -71,7 +84,7 @@ public class CharactersFragment extends Fragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        charactersAdapter = new CharactersAdapter(getContext(), fetchCharacters());
+        charactersAdapter = new CharactersAdapter(getContext(), fetchCharactersFromDB());
         recyclerView.setAdapter(charactersAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -84,7 +97,7 @@ public class CharactersFragment extends Fragment {
         charactersRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                charactersAdapter.swap(fetchCharacters());
+                charactersAdapter.swap(fetchCharactersFromDB());
             }
         });
 
@@ -92,7 +105,24 @@ public class CharactersFragment extends Fragment {
     }
 
 
-    private List<Character> fetchCharacters() {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings:
+                getContext().startActivity(new Intent(getContext(), SettingsActivity.class));
+                break;
+        }
+        return true;
+    }
+
+
+    private List<Character> fetchCharactersFromDB() {
         Cursor cursor = getContext().getContentResolver().query(CharactersTable.CONTENT_URI, null, null, null, null);
         if (charactersRefreshLayout.isRefreshing())
             charactersRefreshLayout.setRefreshing(false);
@@ -141,7 +171,7 @@ public class CharactersFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        charactersAdapter.swap(fetchCharacters());
+                        charactersAdapter.swap(fetchCharactersFromDB());
                     }
                 },
                 new Response.ErrorListener() {

@@ -10,4 +10,6 @@
     <string name="key_comic">comic</string>
     <string name="key_is_comic">is comic</string>
     <string name="key_character">character</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
 </resources>

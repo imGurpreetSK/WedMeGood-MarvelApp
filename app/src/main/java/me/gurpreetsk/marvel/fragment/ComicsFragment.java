@@ -1,17 +1,22 @@
 package me.gurpreetsk.marvel.fragment;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -32,6 +37,7 @@ import butterknife.ButterKnife;
 import me.gurpreetsk.marvel.BuildConfig;
 import me.gurpreetsk.marvel.InitApplication;
 import me.gurpreetsk.marvel.R;
+import me.gurpreetsk.marvel.activity.SettingsActivity;
 import me.gurpreetsk.marvel.adapter.ComicsAdapter;
 import me.gurpreetsk.marvel.model.Comic;
 import me.gurpreetsk.marvel.model.ComicsTable;
@@ -60,6 +66,12 @@ public class ComicsFragment extends Fragment {
 
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -68,7 +80,7 @@ public class ComicsFragment extends Fragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        comicsAdapter = new ComicsAdapter(getContext(), fetchComics());
+        comicsAdapter = new ComicsAdapter(getContext(), fetchComicsFromDB());
         comicsRecyclerView.setAdapter(comicsAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         comicsRecyclerView.setLayoutManager(layoutManager);
@@ -81,7 +93,7 @@ public class ComicsFragment extends Fragment {
         comicsRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                comicsAdapter.swap(fetchComics());
+                comicsAdapter.swap(fetchComicsFromDB());
             }
         });
 
@@ -89,7 +101,23 @@ public class ComicsFragment extends Fragment {
     }
 
 
-    private List<Comic> fetchComics() {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings:
+                getContext().startActivity(new Intent(getContext(), SettingsActivity.class));
+                break;
+        }
+        return true;
+    }
+
+    private List<Comic> fetchComicsFromDB() {
         Cursor cursor = getContext().getContentResolver().query(ComicsTable.CONTENT_URI, null, null, null, null);
         if (comicsRefreshLayout.isRefreshing())
             comicsRefreshLayout.setRefreshing(false);
@@ -142,7 +170,7 @@ public class ComicsFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        comicsAdapter.swap(fetchComics());
+                        comicsAdapter.swap(fetchComicsFromDB());
                     }
                 },
                 new Response.ErrorListener() {
